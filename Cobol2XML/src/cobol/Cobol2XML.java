@@ -52,7 +52,7 @@ public class Cobol2XML {
     
     
     public static void main(String[] args) throws Exception {
-		/* The first command line parameter is used to get the cobol source file namee
+		/* The first command line parameter is used to get the cobol source file name
 		 * In case you are not sure if you are pointing toward the right file, print out the filename
 		 * like this...
 		 *
@@ -61,7 +61,10 @@ public class Cobol2XML {
 		 * A rather crude approach is to hard code the filename for the cobol source file, like this
 		 * InputStream is = new FileInputStream("C:\\Users\\sgs442\\eclipse-workspace\\CobolParser1\\base.cbl")
 		 */
-
+    	
+    	System.out.println("arg[0] : "+args[0]);
+    	
+    	
         try {
             MyLogger.setup();
         } catch (IOException e) {

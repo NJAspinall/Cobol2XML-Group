@@ -31,6 +31,11 @@ public class Cobol implements PubliclyCloneable {
 	protected int dayDateWritten = 0;
 	protected String monthDateWritten;
 	protected int yearDateWritten = 0;
+	
+	//Constant Value
+	protected String constantName;
+	protected double constantValue;
+	protected int lineNumber = 0;
 
 	
 	/**
@@ -247,4 +252,62 @@ public class Cobol implements PubliclyCloneable {
 		
 		return buf.toString();
 	}
+	
+	/**
+	 * Return the constant name.
+	 *
+	 * @return the constant name.
+	 */
+	public String getConstantName() {
+		return constantName;
+	}
+	
+	/**
+	 * Set the constant name 
+	 *
+	 * @param  String constantName
+	 */
+	public void setConstantName(String constantName) {
+		this.constantName = constantName;
+	}
+	
+	/**
+	 * Return the constant value.
+	 *
+	 * @return the constant value.
+	 */
+	public double getConstantValue() {
+		return constantValue;
+	}
+	
+
+	/**
+	 * Set the constant value 
+	 *
+	 * @param  String constantValue
+	 */
+	public void setConstantValue(double constantValue) {
+		this.constantValue = constantValue;
+	}
+	
+	/**
+	 * Return the Line Number.
+	 *
+	 * @return the Line Number.
+	 */
+	public int getLineNumber() {
+		return lineNumber;
+	}
+	
+
+	/**
+	 * Set the line number 
+	 *
+	 * @param  String lineNumber
+	 */
+	public void setLineNumber(int lineNumber) {
+		this.lineNumber = lineNumber;
+	}
+	
+	
 }
