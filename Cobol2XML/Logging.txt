@@ -1,6 +1,6 @@
-Feb 16, 2022 8:57:24 PM cobol.Cobol2XML main
+Feb 24, 2022 8:36:07 PM cobol.Cobol2XML main
 INFO: Cobol2XML V0.1.0
-Feb 16, 2022 8:57:24 PM xmlwriter.XMLPayload writeFile
+Feb 24, 2022 8:36:08 PM xmlwriter.XMLPayload writeFile
 INFO: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <cobol>
     <division>identification</division>
@@ -10,6 +10,26 @@ INFO: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <year-date-written>1995</year-date-written>
     <division>data</division>
     <section>working-storage</section>
+    <Constant>
+        <constant Name="base_2"/>
+        <base_2 Line_Number="88"/>
+        <base_2 Value="2.0"/>
+    </Constant>
+    <Constant>
+        <constant Name="base_8"/>
+        <base_8 Line_Number="88"/>
+        <base_8 Value="8.0"/>
+    </Constant>
+    <Constant>
+        <constant Name="base_10"/>
+        <base_10 Line_Number="88"/>
+        <base_10 Value="10.0"/>
+    </Constant>
+    <Constant>
+        <constant Name="base_16"/>
+        <base_16 Line_Number="88"/>
+        <base_16 Value="16.0"/>
+    </Constant>
     <division>procedure</division>
 </cobol>
 
