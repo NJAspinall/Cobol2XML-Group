@@ -65,7 +65,9 @@ decimal-to-base.
     move entry_number  to w_number
     move spaces        to entry_char
     move 16    to ind
-    perform until w_number < current_base
+***--- Loop runs until w_number is less than current_base
+    perform until w_number < current_base 
+***--- Divides w_number/current_base giving remainder into rest_deivide
        divide current_base into w_number giving w_number
               remainder rest_divide
        end-divide
@@ -98,7 +100,7 @@ decimal-to-base-ex.
 ***---
 base-to-decimal.
 
-***--- allineamento a destra della variabile entry_char (ver 2.3.1 o sup)
+***--- right alignment of the entry_char variable (ver 2.3.1 or sup)
     call "c$justify" using entry_char "R".
 
     call "c$toupper" using entry_char, value 16.
