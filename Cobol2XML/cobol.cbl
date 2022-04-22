@@ -12,6 +12,8 @@ remarks.
 data division.
 working-storage section.
 
+***--- Variable assingment
+
 77  ind                                 pic 99 comp-x.
 77  rest_divide                         pic 99.
 
@@ -42,16 +44,18 @@ main-logic.
     display window erase
 
     display "Base:  " no
+***--- Input for current_base
     accept current_base convert
     display "Value: " no
+***--- Input for entry_char
     accept entry_char
-
+***--- Calls base-to-decimal function
     perform base-to-decimal thru base-to-decimal-ex
-
+***--- Prints to console
     display "Decimal  value: " entry_char
-
+***--- Calls decimal-to-base
     perform decimal-to-base thru decimal-to-base-ex
-
+***--- Prints to console
     display "Base: " current_base " value: " entry_char
 
     accept omitted
@@ -67,7 +71,7 @@ decimal-to-base.
     move 16    to ind
 ***--- Loop runs until w_number is less than current_base
     perform until w_number < current_base 
-***--- Divides w_number/current_base giving remainder into rest_deivide
+***--- Divides w_number/current_base giving remainder into rest_divide
        divide current_base into w_number giving w_number
               remainder rest_divide
        end-divide
