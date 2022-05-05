@@ -1,7 +1,4 @@
-May 05, 2022 1:47:05 PM cobol.Cobol2XML main
-INFO: Cobol2XML V0.1.0
-May 05, 2022 1:47:06 PM xmlwriter.XMLPayload writeFile
-INFO: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <cobol>
     <division>identification</division>
     <Program-ID>base</Program-ID>
@@ -15,4 +12,3 @@ INFO: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <comment>convert from base to dicimal system </comment>
     <comment>allineamento a destra della variabile entry_char </comment>
 </cobol>
-

@@ -13,7 +13,7 @@ import parse.tokens.Literal;
 import parse.tokens.TokenAssembly;
 import parse.tokens.Tokenizer;
 
-class DivisonTest {
+class DivisionTest {
 
 	@Test
 	void test() {
@@ -23,6 +23,7 @@ class DivisonTest {
 		Assembly in = new TokenAssembly(t);
 		Assembly out = p.bestMatch(in);
 		
+		//Check all of stack was consumed
 		assertTrue(out.stackIsEmpty());
 		
 		ArrayList<Parser> visited = new ArrayList<Parser>();
