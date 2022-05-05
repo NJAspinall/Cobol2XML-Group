@@ -1,6 +1,6 @@
-May 05, 2022 1:47:05 PM cobol.Cobol2XML main
+May 05, 2022 3:09:19 PM cobol.Cobol2XML main
 INFO: Cobol2XML V0.1.0
-May 05, 2022 1:47:06 PM xmlwriter.XMLPayload writeFile
+May 05, 2022 3:09:19 PM xmlwriter.XMLPayload writeFile
 INFO: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <cobol>
     <division>identification</division>
@@ -10,9 +10,18 @@ INFO: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <year-date-written>1995</year-date-written>
     <division>data</division>
     <section>working-storage</section>
+    <comment>Variable assingment </comment>
     <division>procedure</division>
+    <comment>Input for current_base </comment>
+    <comment>Input for entry_char </comment>
+    <comment>Calls base-to-decimal function </comment>
+    <comment>Prints to console </comment>
+    <comment>Calls decimal-to-base </comment>
+    <comment>Prints to console </comment>
     <comment>convert from decimal to base system </comment>
+    <comment>Loop runs until w_number is less than current_base </comment>
+    <comment>Divides w_number </comment>
     <comment>convert from base to dicimal system </comment>
-    <comment>allineamento a destra della variabile entry_char </comment>
+    <comment>right alignment of the entry_char variable </comment>
 </cobol>
 
