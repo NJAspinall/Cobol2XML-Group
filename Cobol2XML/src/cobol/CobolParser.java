@@ -27,6 +27,7 @@ import parse.Repetition;
 import parse.Sequence;
 import parse.tokens.CaselessLiteral;
 import parse.tokens.Num;
+import parse.tokens.QuotedString;
 import parse.tokens.Symbol;
 import parse.tokens.Tokenizer;
 import parse.tokens.Word;
@@ -58,7 +59,12 @@ public class CobolParser {
 		
 		a.add( CommentLine() );
 		
-		a.add( Function() );
+		//a.add( FunctionOpen() );
+				//a.add( FunctionClose() );
+				
+				a.add( Move() );
+				
+				a.add( Call() );
 		
 		a.add(new Empty());
 		return a;
@@ -185,6 +191,106 @@ public class CobolParser {
 	}
 	
 
+	 /* Return a parser that will recognize the grammer:
+		 * 
+		 * <move> 'from' <source>(startPosition) 'to' <target>(startPosition:length)
+		 */
+		protected Parser Move() {
+
+			//The 'move' Sequence
+			Sequence s = new Sequence();
+			Alternation source  = new Alternation();
+			//add move to the Sequence
+			s.add(new CaselessLiteral("move"));
+			
+			//adds either of the following to the Alternation
+			source.add(new Word());
+			source.add(new Num());
+
+			
+			
+			
+			
+			//get start position
+			//this could be extended to look for an instance of ':' to find a second length parameter,
+			//but all of the Cobol examples simply use a single variable which I assume acts as both
+			//startPos and length
+			Sequence position = new Sequence();
+			position.add(new Symbol("("));
+			//adds all text between the brackets (startPosition)
+			position.add(new Word());
+			//closes parameters
+			position.add(new Symbol(")"));
+			//add the start position parameter
+			source.add(position);
+			
+			Repetition r = new Repetition(source);
+			s.add(r);
+			
+			s.add(new CaselessLiteral("to"));
+			Alternation destination  = new Alternation();
+			destination.add(new Word());
+
+			
+			
+			//get destination startPosition and length
+			Sequence destParameters = new Sequence();
+			//some 'move to' commands contain a start position and length values e.g. entry_char(ind:1)
+			destParameters.add(new Symbol("("));
+			//get start position
+			destParameters.add(new Word());	
+			//get separator value
+			destParameters.add(new Symbol(":"));
+			//get length
+			destParameters.add(new Num());	
+			destParameters.add(new Symbol(")"));
+			
+			destination.add(destParameters);
+			
+			Repetition re = new Repetition(destination);
+			s.add(re);
+			
+			s.setAssembler(new MoveAssembler());
+			return s;
+		}
+		
+		
+	
+	
+	 /* Returns a parser that will recognize the grammar:
+		 * 
+		 * <call> <call identifier> "using" <variable> <value>
+		 */
+		protected Parser Call() {
+			Sequence s = new Sequence();
+			//get call keyword
+			s.add(new CaselessLiteral("call"));
+			//get the subprogram name
+			s.add(new QuotedString());
+			//get using keyword
+			s.add(new CaselessLiteral("using"));
+			//get reference
+			s.add(new Word());
+			
+			// Second sequence
+			Sequence se = new Sequence();
+			//references seperated by ','
+			se.add(new Symbol(","));
+			//get the value keyword
+			se.add(new CaselessLiteral("value"));
+			//get either any number references
+			se.add(new Num());
+			Alternation a = new Alternation(se);
+			// or any quoted references
+			a.add(new QuotedString());
+			s.add(a);
+			
+			s.setAssembler(new CallAssembler());
+			return s;
+			
+		}
+	
+	
 
 	/**
 	 * Return the primary parser for this class -- cobol().

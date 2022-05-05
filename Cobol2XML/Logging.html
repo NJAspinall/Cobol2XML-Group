@@ -8,7 +8,7 @@ h1 {font:normal 11pt Tahoma;}
 </style>
 </head>
 <body>
-<h1>Thu May 05 15:09:19 BST 2022</h1>
+<h1>Thu May 05 15:15:57 BST 2022</h1>
 <table border="0" cellpadding="5" cellspacing="3">
 <tr align="left">
 	<th style="width:10%">Loglevel</th>
@@ -17,12 +17,12 @@ h1 {font:normal 11pt Tahoma;}
 </tr>
 <tr>
 	<td>INFO</td>
-	<td>May 05,2022 15:09</td>
+	<td>May 05,2022 15:15</td>
 	<td>Cobol2XML V0.1.0</td>
 </tr>
 <tr>
 	<td>INFO</td>
-	<td>May 05,2022 15:09</td>
+	<td>May 05,2022 15:15</td>
 	<td><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <cobol>
     <division>identification</division>
@@ -41,10 +41,47 @@ h1 {font:normal 11pt Tahoma;}
     <comment>Calls decimal-to-base </comment>
     <comment>Prints to console </comment>
     <comment>convert from decimal to base system </comment>
+    <move>
+        <from> entry_number</from>
+        <to>w_number  </to>
+    </move>
+    <move>
+        <from> spaces</from>
+        <to>entry_char  </to>
+    </move>
+    <move>
+        <from> 16.0</from>
+        <to>ind  </to>
+    </move>
     <comment>Loop runs until w_number is less than current_base </comment>
     <comment>Divides w_number </comment>
+    <move>
+        <from> hex_value ( hex_idx )</from>
+        <to>entry_char(ind:1.0)      </to>
+    </move>
+    <move>
+        <from> hex_value ( hex_idx )</from>
+        <to>entry_char(ind:1.0)      </to>
+    </move>
     <comment>convert from base to dicimal system </comment>
     <comment>right alignment of the entry_char variable </comment>
+    <Call>
+        <Sub-Program>"c$toupper"entry_charentry_char</Sub-Program>
+        <Reference/>
+        <Value/>
+    </Call>
+    <move>
+        <from> 0.0</from>
+        <to>w_numberrest_divide   </to>
+    </move>
+    <move>
+        <from> dec_value ( hex_idx )</from>
+        <to>rest_divide  </to>
+    </move>
+    <move>
+        <from> w_number</from>
+        <to>entry_number  </to>
+    </move>
 </cobol>
 </td>
 </tr>

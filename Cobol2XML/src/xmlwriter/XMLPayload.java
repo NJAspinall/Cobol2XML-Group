@@ -36,6 +36,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 
@@ -146,6 +147,27 @@ public class XMLPayload {
 		} else {
 			System.out.println("Comment Line null");
 		}
+		
+		
+		//move
+		String from = c.getMoveSource();
+		String to = c.getMoveTarget();
+		if((from != null) && (to != null)) {
+			this.addMoveElement( from, to );
+		} else {
+			//from or to null
+		}
+				
+				
+				
+		//call
+		String subProgram = c.getCallSubProgram();
+		LinkedList<String> values = c.getCallValues();
+		LinkedList<String> references = c.getCallReferences();
+		this.addCallElement(subProgram, references, values);
+		
+		
+		
 	}
 	
 
@@ -223,6 +245,8 @@ public class XMLPayload {
 	}
 	
 	
+	
+	
 	/***
 	 * Creates a function element.
 	 * 
@@ -239,6 +263,74 @@ public class XMLPayload {
 			rootElement.appendChild(function);
 		}
 	}
+	
+	
+
+	//void addMoveElement(String source, String target, Element function) {
+	void addMoveElement(String source, String target) {
+		// move command element
+		//holds pointers from source location and target destination
+		// - Nathan
+		
+		
+		if((source != null) && (target != null))  {
+			Element cobolname = doc.createElement("move");
+			
+			//move source
+			Element from = doc.createElement("from");
+			from.appendChild(doc.createTextNode(source));
+			
+			//move destination
+			Element to = doc.createElement("to");
+			to.appendChild(doc.createTextNode(target));
+			
+			cobolname.appendChild(from);
+			cobolname.appendChild(to);
+			
+			rootElement.appendChild(cobolname);
+			}
+	}
+	
+	
+	void addCallElement(String sp, LinkedList<String> references, LinkedList<String> values) {
+		if((sp != "") && (references.isEmpty() != true) && (values.isEmpty() != true)) {
+			//create call element
+			Element cobolname = doc.createElement("Call");
+			
+			//add the subProgram name
+			Element subProgram = doc.createElement("Sub-Program");
+			subProgram.appendChild(doc.createTextNode(sp));
+			cobolname.appendChild(subProgram);
+			
+			//add references
+			for(String s : references) {
+				//add the next reference
+				Element reference = doc.createElement("Reference");
+				subProgram.appendChild(doc.createTextNode(s));
+				cobolname.appendChild(reference);
+			}
+			
+			//add values
+			for(String s : values) {
+				//add the next value
+				Element value = doc.createElement("Value");
+				subProgram.appendChild(doc.createTextNode(s));
+				cobolname.appendChild(value);
+			}
+			
+			rootElement.appendChild(cobolname);
+
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public void writeFile(String filename) {
 		try {

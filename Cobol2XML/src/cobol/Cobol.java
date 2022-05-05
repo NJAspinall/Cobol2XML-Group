@@ -22,11 +22,21 @@
 package cobol;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import utensil.*;
 
 public class Cobol implements PubliclyCloneable {
 	protected String commentLine;
+	
+	protected String moveSource;
+	protected String moveTarget;
+	
+	private LinkedList<String> callReferences = new LinkedList<String>();
+	private LinkedList<String> callValues = new LinkedList<String>();
+	private String callSubProgram;
+	
+	
 	
 	protected String program_id;
 	protected String sectionName;
@@ -171,16 +181,26 @@ public class Cobol implements PubliclyCloneable {
 		return yearDateWritten;
 	}
 	
-	/**
-	 * Set a line of commented text from the COBOL program.
-	 *
-	 * @return line of commented text from the COBOL program
-	 */
-	public void setCommentLine(String commentLine) {
-		this.commentLine = commentLine;
+
+	public String getMoveSource() {
+		return this.moveSource;
 	}
+	
+	public String getMoveTarget() {
+		return this.moveTarget;
+	}
+	
 
-
+	public LinkedList<String> getCallValues() {
+		return this.callValues;
+	}
+	public LinkedList<String> getCallReferences() {
+		return this.callReferences;
+	}
+	public String getCallSubProgram() {
+		return this.callSubProgram;
+	}
+	
 	
 	public void addFunctionElement(String functionName) {
 		System.out.println(functionName);
@@ -246,6 +266,41 @@ public class Cobol implements PubliclyCloneable {
 		this.divisionName = divisionName;
 	}
 
+	
+	
+	/**
+	 * Set a line of commented text from the COBOL program.
+	 *
+	 * @return line of commented text from the COBOL program
+	 */
+	public void setCommentLine(String commentLine) {
+		this.commentLine = commentLine;
+	}
+
+	
+	public void setMoveSource(String source) {
+		this.moveSource = source;
+	}
+	
+	public void setMoveTarget(String target) {
+		this.moveTarget = target;
+	}
+	
+	public void setCallValues(LinkedList<String> values) {
+		this.callValues = values;
+	}
+	public void setReferences(LinkedList<String> references) {
+		this.callReferences = references;
+	}
+	public void setCallSubProgram(String subProgram) {
+		this.callSubProgram = subProgram;
+	}
+	
+	
+
+	
+	
+	
 	/**
 	 * Return a textual description of this cobol type.
 	 * 
