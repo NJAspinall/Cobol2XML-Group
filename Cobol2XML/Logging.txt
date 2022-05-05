@@ -1,6 +1,6 @@
-May 05, 2022 1:47:05 PM cobol.Cobol2XML main
+May 05, 2022 5:09:57 PM cobol.Cobol2XML main
 INFO: Cobol2XML V0.1.0
-May 05, 2022 1:47:06 PM xmlwriter.XMLPayload writeFile
+May 05, 2022 5:09:57 PM xmlwriter.XMLPayload writeFile
 INFO: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <cobol>
     <division>identification</division>
@@ -10,9 +10,55 @@ INFO: <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <year-date-written>1995</year-date-written>
     <division>data</division>
     <section>working-storage</section>
+    <comment>Variable assingment </comment>
     <division>procedure</division>
+    <comment>Input for current_base </comment>
+    <comment>Input for entry_char </comment>
+    <comment>Calls base-to-decimal function </comment>
+    <comment>Prints to console </comment>
+    <comment>Calls decimal-to-base </comment>
+    <comment>Prints to console </comment>
     <comment>convert from decimal to base system </comment>
+    <move>
+        <from> entry_number</from>
+        <to>w_number  </to>
+    </move>
+    <move>
+        <from> spaces</from>
+        <to>entry_char  </to>
+    </move>
+    <move>
+        <from> 16.0</from>
+        <to>ind  </to>
+    </move>
+    <comment>Loop runs until w_number is less than current_base </comment>
+    <comment>Divides w_number </comment>
+    <move>
+        <from> hex_value ( hex_idx )</from>
+        <to>entry_char(ind:1.0)      </to>
+    </move>
+    <move>
+        <from> hex_value ( hex_idx )</from>
+        <to>entry_char(ind:1.0)      </to>
+    </move>
     <comment>convert from base to dicimal system </comment>
-    <comment>allineamento a destra della variabile entry_char </comment>
+    <comment>right alignment of the entry_char variable </comment>
+    <Call>
+        <Sub-Program>"c$toupper"</Sub-Program>
+        <Reference>entry_char</Reference>
+        <Value>entry_char</Value>
+    </Call>
+    <move>
+        <from> 0.0</from>
+        <to>w_numberrest_divide   </to>
+    </move>
+    <move>
+        <from> dec_value ( hex_idx )</from>
+        <to>rest_divide  </to>
+    </move>
+    <move>
+        <from> w_number</from>
+        <to>entry_number  </to>
+    </move>
 </cobol>
 

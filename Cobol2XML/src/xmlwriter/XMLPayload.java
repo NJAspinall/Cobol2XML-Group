@@ -36,6 +36,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 
@@ -146,6 +147,40 @@ public class XMLPayload {
 		} else {
 			System.out.println("Comment Line null");
 		}
+		
+		
+		//move
+		String from = c.getMoveSource();
+		String to = c.getMoveTarget();
+		if((from != null) && (to != null)) {
+			this.addMoveElement( from, to );
+		} else {
+			//from or to null
+		}
+				
+				
+				
+		//call
+		String subProgram = c.getCallSubProgram();
+		LinkedList<String> values = c.getCallValues();
+		LinkedList<String> references = c.getCallReferences();
+		this.addCallElement(subProgram, references, values);
+		
+		
+		//function
+		String functionName = c.getFunctionName();
+		
+		if(c.getFunctionClosed() != null) {
+			boolean closed = c.getFunctionClosed();
+			
+			if(c.getFunctionClosed() == true) {
+				this.addFunctionClose(functionName, closed);
+			}
+			else if(c.getFunctionClosed() == false) {
+				this.addFunctionOpen(functionName, closed);
+			}
+		}
+		
 	}
 	
 
@@ -223,6 +258,8 @@ public class XMLPayload {
 	}
 	
 	
+	
+	
 	/***
 	 * Creates a function element.
 	 * 
@@ -230,15 +267,110 @@ public class XMLPayload {
 	 * 
 	 * -Nathan
 	 */
-	void addFunctionElement(String stringElement) {
-		System.out.println("[XMLPayload.addFunctionElement] String = " +stringElement+ ".");
-		if(stringElement != "") {
-			Element function = doc.createElement("function");
-			function.setAttribute("name", stringElement);
-			//functionName.appendChild(doc.createTextNode(stringElement));  // +"." ?
-			rootElement.appendChild(function);
+	void addFunctionOpen(String stringElement, boolean closed) {
+		if(closed == false) {
+			Element cobolname = doc.createElement("functionStart");
+			cobolname.setAttribute("name", stringElement);
+			cobolname.appendChild(doc.createTextNode(" "));
+			rootElement.appendChild(cobolname);
 		}
 	}
+	
+	
+	/***
+	 * Closes the open function element
+	 * 
+	 * -Nathan
+	 */
+	void addFunctionClose(String stringElement, boolean closed) {
+		if(closed == true) {
+			Element cobolname = doc.createElement("functionEnd");
+			cobolname.setAttribute("name", stringElement);
+			cobolname.appendChild(doc.createTextNode(" "));
+			rootElement.appendChild(cobolname);
+		}
+	}
+	
+	
+
+	//void addMoveElement(String source, String target, Element function) {
+	void addMoveElement(String source, String target) {
+		// move command element
+		//holds pointers from source location and target destination
+		// - Nathan
+		
+		
+		if((source != null) && (target != null))  {
+			Element cobolname = doc.createElement("move");
+			
+			//move source
+			Element from = doc.createElement("from");
+			from.appendChild(doc.createTextNode(source));
+			
+			//move destination
+			Element to = doc.createElement("to");
+			to.appendChild(doc.createTextNode(target));
+			
+			cobolname.appendChild(from);
+			cobolname.appendChild(to);
+			
+			rootElement.appendChild(cobolname);
+			}
+	}
+	
+	
+	void addCallElement(String sp, LinkedList<String> references, LinkedList<String> values) {
+		
+		if((sp != "") && (references.isEmpty() != true) && (values.isEmpty() != true)) {
+			//create call element
+			Element cobolname = doc.createElement("Call");
+			
+			//add the subProgram name
+			Element subProgram = doc.createElement("Sub-Program");
+			subProgram.appendChild(doc.createTextNode(sp));
+			cobolname.appendChild(subProgram);
+			
+			
+			//add references
+			for(String s : references) {
+				cobolname = this.addCallReferenceElement(cobolname, s);
+			}
+			
+			
+			//add values
+			for(String s : values) {
+				cobolname = this.addCallValueElement(cobolname, s);
+			}
+			
+			rootElement.appendChild(cobolname);
+
+		}
+	}
+	
+	
+	Element addCallReferenceElement(Element function, String refText) {
+		
+		Element ref = doc.createElement("Reference");
+		ref.appendChild(doc.createTextNode(refText));
+		
+		function.appendChild(ref);
+		return function;
+	}
+	
+	Element addCallValueElement(Element function, String valText) {
+		
+		Element ref = doc.createElement("Value");
+		ref.appendChild(doc.createTextNode(valText));
+		
+		function.appendChild(ref);
+		return function;
+	}
+	
+	
+	
+	
+	
+	
 	
 	public void writeFile(String filename) {
 		try {
