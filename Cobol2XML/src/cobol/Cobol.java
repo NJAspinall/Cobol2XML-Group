@@ -32,6 +32,9 @@ public class Cobol implements PubliclyCloneable {
 	protected String moveSource;
 	protected String moveTarget;
 	
+	protected String functionName;
+	protected Boolean functionClosed;
+	
 	private LinkedList<String> callReferences = new LinkedList<String>();
 	private LinkedList<String> callValues = new LinkedList<String>();
 	private String callSubProgram;
@@ -182,15 +185,16 @@ public class Cobol implements PubliclyCloneable {
 	}
 	
 
+	//move
 	public String getMoveSource() {
 		return this.moveSource;
 	}
-	
 	public String getMoveTarget() {
 		return this.moveTarget;
 	}
 	
 
+	//call
 	public LinkedList<String> getCallValues() {
 		return this.callValues;
 	}
@@ -201,10 +205,12 @@ public class Cobol implements PubliclyCloneable {
 		return this.callSubProgram;
 	}
 	
-	
-	public void addFunctionElement(String functionName) {
-		System.out.println(functionName);
-		this.functions.add(functionName);
+	//function
+	public String getFunctionName() {
+		return functionName;
+	}
+	public Boolean getFunctionClosed() {
+		return functionClosed;
 	}
 	
 	
@@ -277,15 +283,15 @@ public class Cobol implements PubliclyCloneable {
 		this.commentLine = commentLine;
 	}
 
-	
+	//move
 	public void setMoveSource(String source) {
 		this.moveSource = source;
 	}
-	
 	public void setMoveTarget(String target) {
 		this.moveTarget = target;
 	}
 	
+	//call
 	public void setCallValues(LinkedList<String> values) {
 		this.callValues = values;
 	}
@@ -315,6 +321,14 @@ public class Cobol implements PubliclyCloneable {
 		buf.append(sectionName);
 		
 		return buf.toString();
+	}
+	
+	//function
+	public void setFunctionName(String functionName) {
+		this.functionName = functionName;
+	}
+	public void setFunctionClosed(Boolean closed) {
+		this.functionClosed = closed;
 	}
 
 }

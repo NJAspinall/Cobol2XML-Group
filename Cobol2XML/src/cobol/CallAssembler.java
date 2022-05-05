@@ -18,7 +18,7 @@ public class CallAssembler extends Assembler {
 	 * @param   Assembly   the assembly to work on
 	 */
 	public void workOn(Assembly a) {
-		System.out.println("Running Call Assembly...");
+		//System.out.println("Running Call Assembly...");
 		Cobol c = new Cobol();
 		
 		//dispose of '.'
@@ -34,8 +34,8 @@ public class CallAssembler extends Assembler {
 		while((!t.sval().equalsIgnoreCase("using")) && (a.stackIsEmpty() == false)) {
 			System.out.println("next token");
 			if(t.isNumber()) {
-				tempValues.addFirst(null);
-			} else {
+				tempValues.addFirst(t.sval()+"");
+			} else if(!t.sval().equals("value")){
 				tempValues.addFirst(t.sval());
 			}
 			
@@ -78,6 +78,7 @@ public class CallAssembler extends Assembler {
 				System.out.println("finVal =" +s);
 			}
 		}
+		
 		
 		c.setCallValues(finalValues);
 		c.setReferences(references);

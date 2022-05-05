@@ -167,6 +167,19 @@ public class XMLPayload {
 		this.addCallElement(subProgram, references, values);
 		
 		
+		//function
+		String functionName = c.getFunctionName();
+		
+		if(c.getFunctionClosed() != null) {
+			boolean closed = c.getFunctionClosed();
+			
+			if(c.getFunctionClosed() == true) {
+				this.addFunctionClose(functionName, closed);
+			}
+			else if(c.getFunctionClosed() == false) {
+				this.addFunctionOpen(functionName, closed);
+			}
+		}
 		
 	}
 	
@@ -254,13 +267,27 @@ public class XMLPayload {
 	 * 
 	 * -Nathan
 	 */
-	void addFunctionElement(String stringElement) {
-		System.out.println("[XMLPayload.addFunctionElement] String = " +stringElement+ ".");
-		if(stringElement != "") {
-			Element function = doc.createElement("function");
-			function.setAttribute("name", stringElement);
-			//functionName.appendChild(doc.createTextNode(stringElement));  // +"." ?
-			rootElement.appendChild(function);
+	void addFunctionOpen(String stringElement, boolean closed) {
+		if(closed == false) {
+			Element cobolname = doc.createElement("functionStart");
+			cobolname.setAttribute("name", stringElement);
+			cobolname.appendChild(doc.createTextNode(" "));
+			rootElement.appendChild(cobolname);
+		}
+	}
+	
+	
+	/***
+	 * Closes the open function element
+	 * 
+	 * -Nathan
+	 */
+	void addFunctionClose(String stringElement, boolean closed) {
+		if(closed == true) {
+			Element cobolname = doc.createElement("functionEnd");
+			cobolname.setAttribute("name", stringElement);
+			cobolname.appendChild(doc.createTextNode(" "));
+			rootElement.appendChild(cobolname);
 		}
 	}
 	
@@ -293,6 +320,7 @@ public class XMLPayload {
 	
 	
 	void addCallElement(String sp, LinkedList<String> references, LinkedList<String> values) {
+		
 		if((sp != "") && (references.isEmpty() != true) && (values.isEmpty() != true)) {
 			//create call element
 			Element cobolname = doc.createElement("Call");
@@ -302,20 +330,16 @@ public class XMLPayload {
 			subProgram.appendChild(doc.createTextNode(sp));
 			cobolname.appendChild(subProgram);
 			
+			
 			//add references
 			for(String s : references) {
-				//add the next reference
-				Element reference = doc.createElement("Reference");
-				subProgram.appendChild(doc.createTextNode(s));
-				cobolname.appendChild(reference);
+				cobolname = this.addCallReferenceElement(cobolname, s);
 			}
+			
 			
 			//add values
 			for(String s : values) {
-				//add the next value
-				Element value = doc.createElement("Value");
-				subProgram.appendChild(doc.createTextNode(s));
-				cobolname.appendChild(value);
+				cobolname = this.addCallValueElement(cobolname, s);
 			}
 			
 			rootElement.appendChild(cobolname);
@@ -324,7 +348,23 @@ public class XMLPayload {
 	}
 	
 	
+	Element addCallReferenceElement(Element function, String refText) {
+		
+		Element ref = doc.createElement("Reference");
+		ref.appendChild(doc.createTextNode(refText));
+		
+		function.appendChild(ref);
+		return function;
+	}
 	
+	Element addCallValueElement(Element function, String valText) {
+		
+		Element ref = doc.createElement("Value");
+		ref.appendChild(doc.createTextNode(valText));
+		
+		function.appendChild(ref);
+		return function;
+	}
 	
 	
 	
