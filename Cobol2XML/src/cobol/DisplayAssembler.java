@@ -21,10 +21,12 @@ public class DisplayAssembler extends Assembler {
 		//get the strings and variables to display
 		String displayString = " ";
 		while(a.stackIsEmpty() == false) {
-			t = (Token) a.pop();
-			displayString = t.sval() + displayString;
-			displayString = " " + displayString;
-			System.out.println("display T : " +t.sval());
+				if(!t.sval().equalsIgnoreCase("display")) {
+				t = (Token) a.pop();
+				displayString = t.sval() + displayString;
+				displayString = " " + displayString;
+				//System.out.println("display T : " +t.sval());
+			}
 		}
 		
 		if(!displayString.isBlank()) {
