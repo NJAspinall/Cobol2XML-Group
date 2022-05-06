@@ -23,9 +23,11 @@ package cobol;
 import parse.Alternation;
 import parse.Empty;
 import parse.Parser;
+import parse.Repetition;
 import parse.Sequence;
 import parse.tokens.CaselessLiteral;
 import parse.tokens.Num;
+import parse.tokens.QuotedString;
 import parse.tokens.Symbol;
 import parse.tokens.Tokenizer;
 import parse.tokens.Word;
@@ -54,6 +56,22 @@ public class CobolParser {
 		a.add( SectionName() );
 		
 		a.add( DateWritten() );
+		
+		a.add( CommentLine() );
+
+		
+
+		
+		 
+		//a.add( Function() );
+
+		a.add( Move() );
+				
+		a.add( Call() );
+		
+		a.add( Display() );
+		
+		
 		
 		a.add(new Empty());
 		return a;
@@ -111,22 +129,223 @@ public class CobolParser {
 	 *
 	 */
 	protected Parser DateWritten() {
+		
 		Sequence s = new Sequence();
+		
 		s.add(new CaselessLiteral("date-written") );
+		//remove the '.' appending 'date-written'
 		s.add(new Symbol('.').discard());
+		//get the following available sequence of numbers until the next datatype is reached
 		s.add(new Num());
+		//remove the hyphen between date and month
 		s.add(new Symbol('-').discard());
 
 		//This next Word actually contains month and year (which are extracted in DateAssembler
+		//get the next sequence of string until the next data type is reached
 		s.add(new Word());
+		//remove the hyphen between '1995' and 'mb.'
 		s.add(new Symbol('-').discard());
+		//remove the following string until the next data type is reached ('mb')
 		s.add(new Word().discard());
+		//remove the '.' appending 'mb'
 		s.add(new Symbol('.').discard());
+		//assign a date assembler to piece together the gathered Token data types
 		s.setAssembler(new DateAssembler());
 		return s;
 	}
+	
+	
+	
+	/*
+	* Return a parser that will recognize the grammar:
+	*
+	* ***--- comment text
+	*
+	*/
+	protected Parser CommentLine() {
+	//System.out.println("commentLine()");
+	Sequence s = new Sequence();
+	Repetition r = new Repetition(new Word());
+	s.add(new Symbol("*"));
+	s.add(new Symbol("*"));
+	s.add(new Symbol("*"));
+	s.add(new Symbol("-"));
+	s.add(new Symbol("-"));
+	s.add(new Symbol("-"));
+	s.add(new Word());
+	s.add(r);
+	s.setAssembler(new CommentLineAssembler());
+	return s;
+	}
 
+	
+	
+	
+	/*
+	 * Return a parser that will recognise the grammar:
+	 * 
+	 * <functionName> '-ex.' / '.'
+	 */
+	protected Parser Function() {
+		Sequence s = new Sequence();
+		
+		//function name
+		s.add(new Word());
+		
+		Alternation a = new Alternation();
+		a.add(new Symbol("."));
+		a.add(new CaselessLiteral("-ex."));
+		Repetition r = new Repetition(a);
+		s.add(r);
+		
+		
+		
+		
+		
+		
+		//a.add(new CaselessLiteral("-ex."));
+		//a.add(new Symbol("."));
+		
+		s.setAssembler(new FunctionAssembler());
+		return s;
+	}
+	
 
+	 /* Return a parser that will recognize the grammar:
+	 * 
+	 * <move> 'from' <source>(startPosition) 'to' <target>(startPosition:length)
+	 */
+	protected Parser Move() {
+
+		//The 'move' Sequence
+		Sequence s = new Sequence();
+		Alternation source  = new Alternation();
+		//add move to the Sequence
+		s.add(new CaselessLiteral("move"));
+		
+		//adds either of the following to the Alternation
+		source.add(new Word());
+		source.add(new Num());
+
+		
+		
+		
+		
+		//get start position
+		//this could be extended to look for an instance of ':' to find a second length parameter,
+		//but all of the Cobol examples simply use a single variable which I assume acts as both
+		//startPos and length
+		Sequence position = new Sequence();
+		position.add(new Symbol("("));
+		//adds all text between the brackets (startPosition)
+		position.add(new Word());
+		//closes parameters
+		position.add(new Symbol(")"));
+		//add the start position parameter
+		source.add(position);
+		
+		Repetition r = new Repetition(source);
+		s.add(r);
+		
+		s.add(new CaselessLiteral("to"));
+		Alternation destination  = new Alternation();
+		destination.add(new Word());
+
+		
+		
+		//get destination startPosition and length
+		Sequence destParameters = new Sequence();
+		//some 'move to' commands contain a start position and length values e.g. entry_char(ind:1)
+		destParameters.add(new Symbol("("));
+		//get start position
+		destParameters.add(new Word());	
+		//get separator value
+		destParameters.add(new Symbol(":"));
+		//get length
+		destParameters.add(new Num());	
+		destParameters.add(new Symbol(")"));
+		
+		destination.add(destParameters);
+		
+		Repetition re = new Repetition(destination);
+		s.add(re);
+		
+		s.setAssembler(new MoveAssembler());
+		return s;
+	}
+		
+		
+	
+	
+	 /* Returns a parser that will recognize the grammar:
+	 * 
+	 * <call> <call identifier> "using" <variable> <value>
+	 */
+	protected Parser Call() {
+		Sequence s = new Sequence();
+		//get call keyword
+		s.add(new CaselessLiteral("call"));
+		//get the subprogram name
+		s.add(new QuotedString());
+		//get using keyword
+		s.add(new CaselessLiteral("using"));
+		
+		//get reference
+		Alternation a = new Alternation();
+		//get reference
+		a.add(new Word());
+		// get any separators between references
+		a.add(new Symbol(","));
+		
+		Repetition r = new Repetition(a);
+		s.add(r);
+		
+		//get values
+		a = new Alternation();
+		// if the seperator does not exist then 
+		a.add(new Symbol(","));
+		// or any variables given as values
+		a.add(new Word());
+		// or any numerical values
+		a.add(new Num());
+		
+		
+		r = new Repetition(a);
+		s.add(r);
+		
+		s.setAssembler(new CallAssembler());
+		return s;
+		
+	}
+	
+	
+
+	/* Returns a parser that will recognize the grammar:
+	 * 
+	 * <call> <call identifier> "using" <variable> <value>
+	 */
+	protected Parser Display() {
+		Sequence s = new Sequence();
+		Alternation a = new Alternation();
+		
+		
+		//get 'display' command
+		s.add(new CaselessLiteral("display").discard());
+		
+		//get possible text or variable names to follow
+		
+		a.add(new Word());
+		a.add(new QuotedString());
+		
+		Repetition r = new Repetition(a);
+		
+		s.add(r);
+		
+		s.setAssembler(new DisplayAssembler());
+		return s;
+	}
+	
+	
 	/**
 	 * Return the primary parser for this class -- cobol().
 	 *
