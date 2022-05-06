@@ -15,17 +15,18 @@ public class DisplayAssembler extends Assembler {
 		Token t;
 		
 		//dispose of 'display'
-		t = (Token) a.pop();
-		System.out.println("Initial T : " +t.sval());
+		//t = (Token) a.pop();
+		//System.out.println("Initial T : " +t.sval());
 		
 		//get the strings and variables to display
 		String displayString = " ";
 		while(a.stackIsEmpty() == false) {
-				if(!t.sval().equalsIgnoreCase("display")) {
-				t = (Token) a.pop();
+			t = (Token) a.pop();
+			if(!t.sval().equalsIgnoreCase("display")) {
+				
 				displayString = t.sval() + displayString;
 				displayString = " " + displayString;
-				//System.out.println("display T : " +t.sval());
+				System.out.println("display T : " +t.sval());
 			}
 		}
 		
