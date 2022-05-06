@@ -36,7 +36,9 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -45,6 +47,9 @@ import java.util.logging.Logger;
 public class XMLPayload {
 	Document doc;
 	Element rootElement;
+	
+	protected ArrayList<Element> elements = new ArrayList<Element>();
+	
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	public XMLPayload() {
@@ -142,10 +147,10 @@ public class XMLPayload {
 		String commentLine = c.getCommentLine();
 		if(commentLine != null ) {
 			this.addCommentLineElement( commentLine );
-			System.out.println("Got Section");
+			//System.out.println("Got Section");
 			// Add contents of procedure division
 		} else {
-			System.out.println("Comment Line null");
+			//System.out.println("Comment Line null");
 		}
 		
 		
@@ -174,11 +179,21 @@ public class XMLPayload {
 			boolean closed = c.getFunctionClosed();
 			
 			if(c.getFunctionClosed() == true) {
-				this.addFunctionClose(functionName, closed);
+				//this.addFunctionClose(functionName, closed);
+				this.addFunction(functionName, closed, elements);
 			}
 			else if(c.getFunctionClosed() == false) {
-				this.addFunctionOpen(functionName, closed);
+				//this.addFunctionOpen(functionName, closed);#
+				this.addFunction(functionName, closed, elements);
 			}
+		}
+		
+		
+		//display
+		String displayString = c.getDisplayString();
+		
+		if(displayString != null) {
+			this.addDisplayElement(displayString);
 		}
 		
 	}
@@ -292,6 +307,20 @@ public class XMLPayload {
 	}
 	
 	
+	void addFunction(String functionName, boolean closed, List<Element> elements) {
+		if(closed == true) {
+			Element function = doc.createElement("Function");
+			
+			
+			
+			
+			for(Element e : elements) {
+				function.appendChild(e);
+			}
+		}
+	}
+	
+	
 
 	//void addMoveElement(String source, String target, Element function) {
 	void addMoveElement(String source, String target) {
@@ -315,6 +344,7 @@ public class XMLPayload {
 			cobolname.appendChild(to);
 			
 			rootElement.appendChild(cobolname);
+			//elements.add(cobolname);
 			}
 	}
 	
@@ -343,7 +373,7 @@ public class XMLPayload {
 			}
 			
 			rootElement.appendChild(cobolname);
-
+			//elements.add(cobolname);
 		}
 	}
 	
@@ -367,6 +397,17 @@ public class XMLPayload {
 	}
 	
 	
+	
+	
+	
+	void addDisplayElement(String displayString) {
+		if(displayString != "") {
+			Element display = doc.createElement("Display");
+			display.appendChild(doc.createTextNode(displayString));
+			
+			rootElement.appendChild(display);
+		}
+	}
 	
 	
 	
