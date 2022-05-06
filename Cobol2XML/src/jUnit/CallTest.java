@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import cobol.Cobol;
 import cobol.CobolParser;
 import parse.Assembly;
 import parse.Parser;
@@ -31,6 +32,9 @@ class CallTest {
 		Literal literal = new Literal("call \"c$toupper\" using entry_char, value 16");
 		String string = literal.unvisitedString(visitedList);
 		assertEquals(string, "call \"c$toupper\" using entry_char, value 16");
+		
+		Cobol c = (Cobol) out.getTarget();
+		assertNotEquals(null, c.getCallSubProgram());
 	}
 
 }
