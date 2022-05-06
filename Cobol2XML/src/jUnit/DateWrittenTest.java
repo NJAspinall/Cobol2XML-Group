@@ -32,9 +32,9 @@ class DateWrittenTest {
 		assertEquals(string, "date-written.  01-apr-2022 - mb.");
 		
 		Cobol c = (Cobol) out.getTarget();
-		assertNotEquals(null, (Integer) c.getDayDateWritten());
-		assertNotEquals(null, (Integer) c.getYearDateWritten());
-		assertNotEquals(null, (String) c.getMonthDateWritten());
+		assertEquals(1, c.getDayDateWritten());
+		assertEquals("apr", c.getMonthDateWritten());
+		assertEquals(2022, c.getYearDateWritten());
 	}
 
 }

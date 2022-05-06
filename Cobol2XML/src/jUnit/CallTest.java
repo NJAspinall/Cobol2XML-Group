@@ -3,6 +3,7 @@ package jUnit;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +35,13 @@ class CallTest {
 		assertEquals(string, "call \"c$toupper\" using entry_char, value 16");
 		
 		Cobol c = (Cobol) out.getTarget();
-		assertNotEquals(null, c.getCallSubProgram());
+		assertEquals("\"c$toupper\"", c.getCallSubProgram());
+		LinkedList<String> refs = new LinkedList<String>();
+		refs.add("entry_char");
+		LinkedList<String> vals = new LinkedList<String>();
+		vals.add("16");
+		assertEquals(refs, c.getCallReferences());
+		assertEquals(refs, c.getCallValues());
 	}
 
 }

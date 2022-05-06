@@ -36,7 +36,7 @@ class CommentTest {
 		assertEquals(string, "***---  convert from decimal to base system");
 		
 		Cobol c = (Cobol) out.getTarget();
-		assertNotEquals(null, c.getCommentLine());
+		assertEquals("convert from decimal to base system", c.getCommentLine().trim());
 	}
 
 }

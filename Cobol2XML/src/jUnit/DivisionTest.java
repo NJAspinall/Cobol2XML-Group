@@ -30,6 +30,10 @@ class DivisionTest {
 		Literal literal = new Literal("procedure division.");
 		String string = literal.unvisitedString(visitedList);
 		assertEquals(string, "procedure division.");
+		
+		Cobol c = (Cobol) out.getTarget();
+		assertNotEquals(null, c.getDivisionName());
+		assertEquals("procedure", c.getDivisionName());
 	}
 
 }
