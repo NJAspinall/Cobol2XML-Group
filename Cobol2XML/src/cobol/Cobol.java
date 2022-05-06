@@ -32,6 +32,8 @@ public class Cobol implements PubliclyCloneable {
 	protected String moveSource;
 	protected String moveTarget;
 	
+	protected String displayString;
+	
 	protected String functionName;
 	protected Boolean functionClosed;
 	
@@ -185,6 +187,8 @@ public class Cobol implements PubliclyCloneable {
 	}
 	
 
+	
+	
 	//move
 	public String getMoveSource() {
 		return this.moveSource;
@@ -205,6 +209,7 @@ public class Cobol implements PubliclyCloneable {
 		return this.callSubProgram;
 	}
 	
+	
 	//function
 	public String getFunctionName() {
 		return functionName;
@@ -214,9 +219,18 @@ public class Cobol implements PubliclyCloneable {
 	}
 	
 	
-	
-	
 
+	//display
+	public String getDisplayString() {
+		return displayString;
+	}
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * Set the name of this cobol file.
 	 *
@@ -283,6 +297,10 @@ public class Cobol implements PubliclyCloneable {
 		this.commentLine = commentLine;
 	}
 
+	
+	
+	
+	
 	//move
 	public void setMoveSource(String source) {
 		this.moveSource = source;
@@ -290,6 +308,8 @@ public class Cobol implements PubliclyCloneable {
 	public void setMoveTarget(String target) {
 		this.moveTarget = target;
 	}
+	
+	
 	
 	//call
 	public void setCallValues(LinkedList<String> values) {
@@ -302,8 +322,27 @@ public class Cobol implements PubliclyCloneable {
 		this.callSubProgram = subProgram;
 	}
 	
-	
 
+	
+	//function
+	public void setFunctionName(String functionName) {
+		this.functionName = functionName;
+	}
+	public void setFunctionClosed(Boolean closed) {
+		this.functionClosed = closed;
+	}
+	
+	
+	
+	//display
+	public void setDisplayString(String displayString) {
+		this.displayString = displayString;
+		
+	}
+
+	
+	
+	
 	
 	
 	
@@ -323,12 +362,5 @@ public class Cobol implements PubliclyCloneable {
 		return buf.toString();
 	}
 	
-	//function
-	public void setFunctionName(String functionName) {
-		this.functionName = functionName;
-	}
-	public void setFunctionClosed(Boolean closed) {
-		this.functionClosed = closed;
-	}
 
 }
