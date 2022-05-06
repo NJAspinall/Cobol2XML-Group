@@ -59,12 +59,19 @@ public class CobolParser {
 		
 		a.add( CommentLine() );
 
-		a.add( Function() );
+		
 
-				
+		
+		 
+		//a.add( Function() );
+
 		a.add( Move() );
 				
 		a.add( Call() );
+		
+		a.add( Display() );
+		
+		
 		
 		a.add(new Empty());
 		return a;
@@ -177,22 +184,14 @@ public class CobolParser {
 	/*
 	 * Return a parser that will recognise the grammar:
 	 * 
-	 * <functionName>'-ex.'
+	 * <functionName> '-ex.' / '.'
 	 */
 	protected Parser Function() {
 		Sequence s = new Sequence();
 		
-		//base
+		//function name
 		s.add(new Word());
-		//-
-		s.add(new Symbol("-"));
-		//to
-		s.add(new Word());
-		//-
-		s.add(new Symbol("-"));
-		//decimal
-		s.add(new Word());
-		//		'.' / '-ex'.
+		
 		Alternation a = new Alternation();
 		a.add(new Symbol("."));
 		a.add(new CaselessLiteral("-ex."));
@@ -303,7 +302,7 @@ public class CobolParser {
 		
 		//get values
 		a = new Alternation();
-		// get any seperators between values
+		// if the seperator does not exist then 
 		a.add(new Symbol(","));
 		// or any variables given as values
 		a.add(new Word());
@@ -321,6 +320,32 @@ public class CobolParser {
 	
 	
 
+	/* Returns a parser that will recognize the grammar:
+	 * 
+	 * <call> <call identifier> "using" <variable> <value>
+	 */
+	protected Parser Display() {
+		Sequence s = new Sequence();
+		Alternation a = new Alternation();
+		Repetition r = new Repetition(a);
+		
+		//get 'display' command
+		s.add(new CaselessLiteral("display"));
+		
+		//get possible text or variable names to follow
+		
+		a.add(new Word());
+		a.add(new QuotedString());
+		
+		
+		
+		s.add(r);
+		
+		s.setAssembler(new DisplayAssembler());
+		return s;
+	}
+	
+	
 	/**
 	 * Return the primary parser for this class -- cobol().
 	 *
