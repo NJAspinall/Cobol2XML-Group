@@ -32,7 +32,7 @@ class ProgramidTest {
 		assertEquals(string, "program-id.  base.");
 		
 		Cobol c = (Cobol) out.getTarget();
-		assertEquals("base", c.getProgram_ID());
+		assertEquals("base", c.getProgram_ID().trim());
 	}
 
 }

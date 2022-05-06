@@ -8,4 +8,49 @@
     <division>data</division>
     <section>working-storage</section>
     <division>procedure</division>
+    <Display> window erase </Display>
+    <Display> "Base:  " no </Display>
+    <Display> "Value: " no </Display>
+    <Display> "Decimal  value: " entry_char </Display>
+    <Display> "Base: " current_base " value: " entry_char </Display>
+    <comment>convert from decimal to base system </comment>
+    <move>
+        <from> entry_number</from>
+        <to>w_number  </to>
+    </move>
+    <move>
+        <from> spaces</from>
+        <to>entry_char  </to>
+    </move>
+    <move>
+        <from> 16.0</from>
+        <to>ind  </to>
+    </move>
+    <move>
+        <from> hex_value ( hex_idx )</from>
+        <to>entry_char(ind:1.0)      </to>
+    </move>
+    <move>
+        <from> hex_value ( hex_idx )</from>
+        <to>entry_char(ind:1.0)      </to>
+    </move>
+    <comment>convert from base to dicimal system </comment>
+    <comment>allineamento a destra della variabile entry_char </comment>
+    <Call>
+        <Sub-Program>"c$toupper"</Sub-Program>
+        <Reference>entry_char</Reference>
+        <Value>entry_char</Value>
+    </Call>
+    <move>
+        <from> 0.0</from>
+        <to>w_numberrest_divide   </to>
+    </move>
+    <move>
+        <from> dec_value ( hex_idx )</from>
+        <to>rest_divide  </to>
+    </move>
+    <move>
+        <from> w_number</from>
+        <to>entry_number  </to>
+    </move>
 </cobol>

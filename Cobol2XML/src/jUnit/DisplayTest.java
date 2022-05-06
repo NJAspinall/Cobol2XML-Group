@@ -32,8 +32,7 @@ class DisplayTest {
 		assertEquals(string, "display \"Decimal  value: \" entry_char");
 		
 		Cobol c = (Cobol) out.getTarget();
-		assertNotEquals(null, c.getDisplayString());
-		assertEquals("procedure", c.getDivisionName());
+		assertEquals("\"Decimal  value: \" entry_char", c.getDisplayString().trim());
 	}
 
 }
